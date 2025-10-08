@@ -1,0 +1,43 @@
+# Node modules
+node_modules/
+
+# Environment variables
+.env
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# Runtime data
+pids
+*.pid
+*.seed
+
+# Debug files
+*.swp
+*.swo
+
+# macOS system files
+.DS_Store
+
+# VSCode settings
+.vscode/
+
+# React Native / Android
+android/.gradle/
+android/app/build/
+*.keystore
+
+# React Native / iOS
+ios/Pods/
+ios/build/
+ios/DerivedData/
+
+# Expo
+.expo/
+.expo-shared/
+
+# Misc
+coverage/
+dist/
