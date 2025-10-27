@@ -1,8 +1,23 @@
 const express = require('express');
 const router = express.Router();
 
-router.get('/', (req, res) => {
-    res.send('Jobs route is working correctly');
-});
+const {
+  getJobs,
+  getJob,
+  createJob,
+  updateJob,
+  deleteJob,
+} = require('../controllers/jobController');
+
+// Base route: /api/jobs
+router.route('/')
+  .get(getJobs)
+  .post(createJob);
+
+// Route with ID parameter
+router.route('/:id')
+  .get(getJob)
+  .put(updateJob)
+  .delete(deleteJob);
 
 module.exports = router;
