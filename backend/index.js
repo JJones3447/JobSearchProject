@@ -9,8 +9,12 @@ app.use(cors());
 app.use(express.json());
 
 const jobRoutes = require('./routes/jobRoutes');
+const interviewRoutes = require('./routes/interviewRoutes');
+const jobInterviewRoutes = require('./routes/jobInterviewRoutes');
 
 app.use('/api/jobs', jobRoutes);
+app.use('/api/interviews', interviewRoutes);
+app.use('/api/jobs/:jobID/interviews', jobInterviewRoutes);
 
 app.get('/', (req, res) => {
     res.send('Default route, everything should be okay');
