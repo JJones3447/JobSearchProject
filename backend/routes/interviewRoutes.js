@@ -6,13 +6,14 @@ const {
   updateInterview,
   deleteInterview,
 } = require('../controllers/interviewController');
+const {validateInterview} = require('../middleware/validateInput');
 
 router.route('/')
   .get(getAllInterviews);
 
 router.route('/:id')
   .get(getInterviewById)
-  .put(updateInterview)
+  .put(validateInterview, updateInterview)
   .delete(deleteInterview);
 
 module.exports = router;

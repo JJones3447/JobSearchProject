@@ -8,16 +8,15 @@ const {
   updateJob,
   deleteJob,
 } = require('../controllers/jobController');
+const {validateJob} = require('../middleware/validateInput');
 
-// Base route: /api/jobs
 router.route('/')
   .get(getJobs)
-  .post(createJob);
+  .post(validateJob, createJob);
 
-// Route with ID parameter
 router.route('/:id')
   .get(getJob)
-  .put(updateJob)
+  .put(validateJob, updateJob)
   .delete(deleteJob);
 
 module.exports = router;

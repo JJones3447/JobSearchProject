@@ -12,13 +12,20 @@ const jobRoutes = require('./routes/jobRoutes');
 const interviewRoutes = require('./routes/interviewRoutes');
 const jobInterviewRoutes = require('./routes/jobInterviewRoutes');
 
+const errorHandler = require('./middleware/errorHandler');
+
 app.use('/api/jobs', jobRoutes);
 app.use('/api/interviews', interviewRoutes);
 app.use('/api/jobs/:jobID/interviews', jobInterviewRoutes);
-
 app.get('/', (req, res) => {
     res.send('Default route, everything should be okay');
 });
+
+app.all(/.*/, (req, res, next) => {
+  const AppError = require('./utils/appError');
+  next(new AppError(`Cannot find ${req.originalUrl} on the server`, 404));
+});
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {

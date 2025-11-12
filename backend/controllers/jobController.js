@@ -1,66 +1,35 @@
 const Job = require('../models/jobModel');
+const AppError = require('../utils/appError');
+const catchAsync = require('../utils/catchAsync');
 
-const getJobs = async (req, res) => {
-  try {
-    const jobs = await Job.getAllJobs();
-    res.json(jobs);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Server error retrieving jobs' });
-  }
-};
+exports.getJobs = catchAsync(async (req, res, next) => {
+  const jobs = await Job.getAllJobs();
+  res.json(jobs);
+});
 
-const getJob = async (req, res) => {
-  try {
-    const job = await Job.getJobById(req.params.id);
-    if (!job) return res.status(404).json({ message: 'Job not found' });
-    res.json(job);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Server error retrieving job' });
-  }
-};
+exports.getJob = catchAsync(async (req, res, next) => {
+  const job = await Job.getJobById(req.params.id);
+  if (!job) return next(new AppError('Job not found', 404));
+  res.json(job);
+});
 
-const createJob = async (req, res) => {
-  try {
-    const newJob = await Job.createJob(req.body);
-    res.status(201).json(newJob);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Server error creating job' });
-  }
-};
+exports.createJob = catchAsync(async (req, res, next) => {
+  const newJob = await Job.createJob(req.body);
+  res.status(201).json(newJob);
+});
 
-const updateJob = async (req, res) => {
-  try {
-    const existingJob = await Job.getJobById(req.params.id);
-    if (!existingJob) return res.status(404).json({ message: 'Job not found' });
+exports.updateJob = catchAsync(async (req, res, next) => {
+  const existingJob = await Job.getJobById(req.params.id);
+  if (!existingJob) return next(new AppError('Job not found', 404));
 
-    const updatedJob = await Job.updateJob(req.params.id, req.body);
-    res.json(updatedJob);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Server error updating job' });
-  }
-};
+  const updatedJob = await Job.updateJob(req.params.id, req.body);
+  res.json(updatedJob);
+});
 
-const deleteJob = async (req, res) => {
-  try {
-    const existingJob = await Job.getJobById(req.params.id);
-    if (!existingJob) return res.status(404).json({ message: 'Job not found' });
+exports.deleteJob = catchAsync(async (req, res, next) => {
+  const existingJob = await Job.getJobById(req.params.id);
+  if (!existingJob) return next(new AppError('Job not found', 404));
 
-    await Job.deleteJob(req.params.id);
-    res.json({ message: 'Job deleted successfully' });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Server error deleting job' });
-  }
-};
-
-module.exports = {
-  getJobs,
-  getJob,
-  createJob,
-  updateJob,
-  deleteJob,
-};
+  await Job.deleteJob(req.params.id);
+  res.json({ message: 'Job deleted successfully' });
+});
